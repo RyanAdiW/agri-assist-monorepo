@@ -1,0 +1,14 @@
+# env
+.env
+.env.*
+!.env.example
+
+# logs / build
+*.log
+bin/
+dist/
+coverage/
+
+# misc
+.DS_Store
+Thumbs.db
