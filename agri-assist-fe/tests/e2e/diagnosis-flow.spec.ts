@@ -76,6 +76,7 @@ test("diagnosis flow works from landing to feedback", async ({ page }) => {
           candidates: [
             {
               id: "antraknosa",
+              kind: "penyakit",
               name: "Patek / Antraknosa",
               description: "Jamur menyerang buah cabai.",
               score: 0.818,

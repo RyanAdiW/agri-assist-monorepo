@@ -7,6 +7,7 @@ export type TreatmentCategory =
   | "kimia";
 
 export type ConfidenceLabel = "tinggi" | "sedang" | "rendah";
+export type DiagnosisKind = "hama" | "penyakit";
 
 export interface Symptom {
   id: string;
@@ -28,6 +29,7 @@ export interface TreatmentPillar {
 
 export interface DiagnosisCandidate {
   id: string;
+  kind: DiagnosisKind;
   name: string;
   description: string;
   score: number;
@@ -60,6 +62,7 @@ export interface FeedbackResult {
 
 export interface DiseaseSeed {
   id: string;
+  kind: DiagnosisKind;
   name: string;
   description: string;
   symptoms: Array<{

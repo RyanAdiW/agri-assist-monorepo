@@ -1,4 +1,8 @@
-import { type SymptomCategory, type TreatmentCategory } from "@/lib/types";
+import {
+  type DiagnosisKind,
+  type SymptomCategory,
+  type TreatmentCategory
+} from "@/lib/types";
 
 export const appCopy = {
   brand: "Agri-Assist",
@@ -44,6 +48,11 @@ export const confidenceLabels = {
   sedang: "Cukup yakin",
   rendah: "Kemungkinan rendah"
 } as const;
+
+export const diagnosisKindLabels: Record<DiagnosisKind, string> = {
+  hama: "Hama",
+  penyakit: "Penyakit"
+};
 
 export const landingStats = [
   { value: "2-3", label: "kemungkinan hasil yang ditampilkan" },

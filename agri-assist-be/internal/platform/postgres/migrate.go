@@ -187,6 +187,7 @@ func seedDataset(db *gorm.DB, dataset seed.Dataset) error {
 			diseases = append(diseases, DiseaseModel{
 				ID:          disease.ID,
 				CropID:      disease.CropID,
+				Kind:        string(disease.Kind),
 				SortOrder:   diseaseIndex + 1,
 				Name:        disease.Name,
 				Description: disease.Description,

@@ -183,6 +183,7 @@ export const symptoms: Symptom[] = [
 export const diseases: DiseaseSeed[] = [
   {
     id: "thrips",
+    kind: "hama",
     name: "Thrips",
     description:
       "Hama penghisap permukaan bawah daun muda yang menimbulkan bercak keperakan, pucuk menggulung, dan tanaman kerdil serta dapat menjadi vektor virus.",
@@ -211,6 +212,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "lalat-buah",
+    kind: "hama",
     name: "Lalat Buah",
     description:
       "Hama buah yang meletakkan telur pada buah cabai sehingga buah menjadi pucat, busuk, dan mudah jatuh terutama pada musim hujan.",
@@ -237,6 +239,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "kutu-kebul",
+    kind: "hama",
     name: "Kutu Kebul",
     description:
       "Hama pengisap daun yang menimbulkan bercak nekrotik, embun jelaga, hambatan pertumbuhan, dan berperan penting sebagai vektor berbagai virus.",
@@ -262,6 +265,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "kutu-daun-persik",
+    kind: "hama",
     name: "Kutu Daun Persik",
     description:
       "Kutu daun yang mengisap jaringan muda, menyebabkan daun berbercak, keriting, keriput, kekuningan, dan tanaman kerdil serta menjadi vektor banyak virus.",
@@ -287,6 +291,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "kutu-daun",
+    kind: "hama",
     name: "Kutu Daun",
     description:
       "Aphididae menyerang pucuk dan daun muda, menyebabkan daun mengkerut, tanaman kerdil, embun madu, dan sering diikuti jelaga hitam serta penularan virus.",
@@ -310,6 +315,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "tungau",
+    kind: "hama",
     name: "Tungau",
     description:
       "Tungau menyerang daun muda dengan mengisap cairan tanaman hingga daun menebal, kaku, melengkung ke bawah, bunga gugur, dan gejala memberat saat musim kemarau.",
@@ -333,6 +339,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "layu-fusarium",
+    kind: "penyakit",
     name: "Layu Fusarium",
     description:
       "Penyakit cendawan yang menyebabkan kelayuan bertahap dari daun bawah, perubahan warna jaringan akar dan batang menjadi coklat, serta munculnya hifa putih seperti kapas.",
@@ -356,6 +363,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "layu-bakteri-ralstonia",
+    kind: "penyakit",
     name: "Layu Bakteri Ralstonia",
     description:
       "Penyakit bakteri yang menimbulkan layu mendadak, warna daun tetap hijau, jaringan vaskuler kecoklatan, dan keluarnya cairan keruh dari batang saat diuji di air.",
@@ -380,6 +388,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "antraknosa",
+    kind: "penyakit",
     name: "Busuk Buah Antraknosa",
     description:
       "Penyakit buah yang ditandai bercak cekung gelap pada buah, pembusukan cepat saat lembap, dan pada serangan berat buah menjadi keriput kering seperti jerami.",
@@ -404,6 +413,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "virus-kuning",
+    kind: "penyakit",
     name: "Virus Kuning",
     description:
       "Penyakit virus yang memicu vein clearing pada daun pucuk, daun menguning dan menggulung ke atas, tanaman kerdil, serta kegagalan pembentukan buah.",
@@ -429,6 +439,7 @@ export const diseases: DiseaseSeed[] = [
   },
   {
     id: "bercak-daun-cercospora",
+    kind: "penyakit",
     name: "Bercak Daun Cercospora",
     description:
       "Penyakit daun yang menyebabkan bercak bulat coklat, pusat bercak memucat hingga berlubang, diikuti kelayuan dan kerontokan daun terutama pada kondisi lembap.",

@@ -1,6 +1,7 @@
 import { confidenceLabels, treatmentLabels } from "@/lib/copy";
 import type {
   DiagnosisCandidate,
+  DiagnosisKind,
   DiagnosisRequest,
   DiagnosisResponse,
   FeedbackResult,
@@ -33,6 +34,7 @@ type ApiSymptomsResponse = {
 
 type ApiDiagnosisCandidate = {
   id: string;
+  kind: DiagnosisKind;
   name: string;
   description: string;
   score: number;
@@ -140,6 +142,7 @@ function mapDiagnosisCandidate(
 ): DiagnosisCandidate {
   return {
     id: candidate.id,
+    kind: candidate.kind,
     name: candidate.name,
     description: candidate.description,
     score: candidate.score,

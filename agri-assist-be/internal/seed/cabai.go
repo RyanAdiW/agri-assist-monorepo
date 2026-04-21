@@ -53,6 +53,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "thrips",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Thrips",
 			Description: "Hama penghisap permukaan bawah daun muda yang menimbulkan bercak keperakan, pucuk menggulung, dan tanaman kerdil serta dapat menjadi vektor virus.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -73,6 +74,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "lalat-buah",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Lalat Buah",
 			Description: "Hama buah yang meletakkan telur pada buah cabai sehingga buah menjadi pucat, busuk, dan mudah jatuh terutama pada musim hujan.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -91,6 +93,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "kutu-kebul",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Kutu Kebul",
 			Description: "Hama pengisap daun yang menimbulkan bercak nekrotik, embun jelaga, hambatan pertumbuhan, dan berperan penting sebagai vektor berbagai virus.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -110,6 +113,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "kutu-daun-persik",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Kutu Daun Persik",
 			Description: "Kutu daun yang mengisap jaringan muda, menyebabkan daun berbercak, keriting, keriput, kekuningan, dan tanaman kerdil serta menjadi vektor banyak virus.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -128,6 +132,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "kutu-daun",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Kutu Daun",
 			Description: "Aphididae menyerang pucuk dan daun muda, menyebabkan daun mengkerut, tanaman kerdil, embun madu, dan sering diikuti jelaga hitam serta penularan virus.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -145,6 +150,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "tungau",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindPest,
 			Name:        "Tungau",
 			Description: "Tungau menyerang daun muda dengan mengisap cairan tanaman hingga daun menebal, kaku, melengkung ke bawah, bunga gugur, dan gejala memberat saat musim kemarau.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -163,6 +169,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "layu-fusarium",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindDisease,
 			Name:        "Layu Fusarium",
 			Description: "Penyakit cendawan yang menyebabkan kelayuan bertahap dari daun bawah, perubahan warna jaringan akar dan batang menjadi coklat, serta munculnya hifa putih seperti kapas.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -181,6 +188,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "layu-bakteri-ralstonia",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindDisease,
 			Name:        "Layu Bakteri Ralstonia",
 			Description: "Penyakit bakteri yang menimbulkan layu mendadak, warna daun tetap hijau, jaringan vaskuler kecoklatan, dan keluarnya cairan keruh dari batang saat diuji di air.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -200,6 +208,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "antraknosa",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindDisease,
 			Name:        "Busuk Buah Antraknosa",
 			Description: "Penyakit buah yang ditandai bercak cekung gelap pada buah, pembusukan cepat saat lembap, dan pada serangan berat buah menjadi keriput kering seperti jerami.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -217,6 +226,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "virus-kuning",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindDisease,
 			Name:        "Virus Kuning",
 			Description: "Penyakit virus yang memicu vein clearing pada daun pucuk, daun menguning dan menggulung ke atas, tanaman kerdil, serta kegagalan pembentukan buah.",
 			SymptomRules: []domain.DiseaseSymptom{
@@ -236,6 +246,7 @@ func CabaiDataset() Dataset {
 		{
 			ID:          "bercak-daun-cercospora",
 			CropID:      crop.ID,
+			Kind:        domain.DiagnosisKindDisease,
 			Name:        "Bercak Daun Cercospora",
 			Description: "Penyakit daun yang menyebabkan bercak bulat coklat, pusat bercak memucat hingga berlubang, diikuti kelayuan dan kerontokan daun terutama pada kondisi lembap.",
 			SymptomRules: []domain.DiseaseSymptom{

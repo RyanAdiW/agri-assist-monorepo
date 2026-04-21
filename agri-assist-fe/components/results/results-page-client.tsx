@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { appCopy } from "@/lib/copy";
+import { appCopy, diagnosisKindLabels } from "@/lib/copy";
 import { getSymptomName } from "@/lib/diagnosis-service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,6 +53,13 @@ export function ResultsPageClient() {
   }
 
   const topCandidate = latestResult.candidates[0];
+  const candidateCounts = latestResult.candidates.reduce(
+    (counts, candidate) => {
+      counts[candidate.kind] += 1;
+      return counts;
+    },
+    { hama: 0, penyakit: 0 }
+  );
   const selectedSymptoms = latestResult.selectedSymptomIds.map((symptomId) =>
     getSymptomName(symptoms, symptomId)
   );
@@ -99,11 +106,17 @@ export function ResultsPageClient() {
                   : "Perlu konsultasi lanjutan"}
               </Badge>
               <Badge variant="outline">{latestResult.cropName}</Badge>
+              {topCandidate ? (
+                <Badge variant={topCandidate.kind === "hama" ? "warning" : "success"}>
+                  Hasil utama: {diagnosisKindLabels[topCandidate.kind]}
+                </Badge>
+              ) : null}
             </div>
             <CardTitle className="text-3xl">{latestResult.message}</CardTitle>
             <CardDescription>
               Sistem menampilkan {latestResult.candidates.length} kemungkinan terbaik
-              berdasarkan gejala yang dipilih.
+              berdasarkan gejala yang dipilih, terdiri dari {candidateCounts.hama}{" "}
+              kemungkinan hama dan {candidateCounts.penyakit} kemungkinan penyakit.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -143,7 +156,8 @@ export function ResultsPageClient() {
                 {appCopy.feedbackTitle}
               </CardTitle>
               <CardDescription className="text-white/80">
-                Umpan balik ini akan ditautkan ke hasil utama: {topCandidate.name}
+                Umpan balik ini akan ditautkan ke hasil utama:{" "}
+                {diagnosisKindLabels[topCandidate.kind]} {topCandidate.name}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

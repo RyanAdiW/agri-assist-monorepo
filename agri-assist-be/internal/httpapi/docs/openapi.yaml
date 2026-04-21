@@ -260,6 +260,9 @@ components:
         id:
           type: string
           example: antraknosa
+        kind:
+          type: string
+          example: penyakit
         name:
           type: string
           example: Patek / Antraknosa
@@ -282,6 +285,7 @@ components:
             $ref: "#/components/schemas/TreatmentPillar"
       required:
         - id
+        - kind
         - name
         - description
         - score

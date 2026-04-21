@@ -29,6 +29,7 @@ func (SymptomModel) TableName() string {
 type DiseaseModel struct {
 	ID           string                `gorm:"primaryKey;size:100"`
 	CropID       string                `gorm:"size:100;not null;index"`
+	Kind         string                `gorm:"size:50;not null"`
 	SortOrder    int                   `gorm:"not null"`
 	Name         string                `gorm:"size:255;not null"`
 	Description  string                `gorm:"type:text;not null"`

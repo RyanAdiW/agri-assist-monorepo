@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { diagnosisKindLabels } from "@/lib/copy";
 import { getConfidenceCopy, getSymptomName } from "@/lib/diagnosis-service";
 import type { DiagnosisCandidate, Symptom } from "@/lib/types";
 import { formatPercent } from "@/lib/utils";
@@ -41,6 +42,9 @@ export function ResultCard({
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant={index === 0 ? "warning" : "outline"}>
             Peringkat {index + 1}
+          </Badge>
+          <Badge variant={candidate.kind === "hama" ? "warning" : "success"}>
+            {diagnosisKindLabels[candidate.kind]}
           </Badge>
           <Badge variant={badgeVariantByConfidence[candidate.confidenceLabel]}>
             {getConfidenceCopy(candidate.confidenceLabel)}

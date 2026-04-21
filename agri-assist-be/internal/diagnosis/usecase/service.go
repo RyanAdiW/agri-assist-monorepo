@@ -129,6 +129,7 @@ func (s *Service) Diagnose(ctx context.Context, request domain.DiagnosisRequest)
 
 		ranked = append(ranked, domain.DiagnosisCandidate{
 			ID:                disease.ID,
+			Kind:              disease.Kind,
 			Name:              disease.Name,
 			Description:       disease.Description,
 			Score:             score,

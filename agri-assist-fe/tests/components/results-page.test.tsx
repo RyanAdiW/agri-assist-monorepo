@@ -62,6 +62,7 @@ describe("ResultsPageClient", () => {
         candidates: [
           {
             id: "antraknosa",
+            kind: "penyakit",
             name: "Patek / Antraknosa",
             description: "Jamur menyerang buah cabai.",
             score: 0.917,

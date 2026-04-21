@@ -29,6 +29,13 @@ const (
 	ConfidenceLow    ConfidenceLabel = "rendah"
 )
 
+type DiagnosisKind string
+
+const (
+	DiagnosisKindPest    DiagnosisKind = "hama"
+	DiagnosisKindDisease DiagnosisKind = "penyakit"
+)
+
 var ErrCropNotFound = errors.New("crop not found")
 
 type Crop struct {
@@ -56,6 +63,7 @@ type Treatment struct {
 type Disease struct {
 	ID           string           `json:"id"`
 	CropID       string           `json:"crop_id"`
+	Kind         DiagnosisKind    `json:"kind"`
 	Name         string           `json:"name"`
 	Description  string           `json:"description"`
 	SymptomRules []DiseaseSymptom `json:"symptoms"`
@@ -81,6 +89,7 @@ type TreatmentPillar struct {
 
 type DiagnosisCandidate struct {
 	ID                string            `json:"id"`
+	Kind              DiagnosisKind     `json:"kind"`
 	Name              string            `json:"name"`
 	Description       string            `json:"description"`
 	Score             float64           `json:"score"`

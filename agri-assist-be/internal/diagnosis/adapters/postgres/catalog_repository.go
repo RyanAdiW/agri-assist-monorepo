@@ -102,6 +102,7 @@ func (r *CatalogRepository) ListDiseasesByCrop(ctx context.Context, cropID strin
 		diseases = append(diseases, domain.Disease{
 			ID:           model.ID,
 			CropID:       model.CropID,
+			Kind:         domain.DiagnosisKind(model.Kind),
 			Name:         model.Name,
 			Description:  model.Description,
 			SymptomRules: rules,
