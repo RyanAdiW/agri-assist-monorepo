@@ -13,6 +13,10 @@ func MigrateAndSeed(db *gorm.DB, dataset seed.Dataset) error {
 		return fmt.Errorf("enable postgres extensions: %w", err)
 	}
 
+	if err := migrateDiseaseKindColumn(db); err != nil {
+		return fmt.Errorf("migrate diseases.kind column: %w", err)
+	}
+
 	if err := db.AutoMigrate(
 		&CropModel{},
 		&SymptomModel{},
@@ -41,6 +45,42 @@ func MigrateAndSeed(db *gorm.DB, dataset seed.Dataset) error {
 
 func ensurePostgresExtensions(db *gorm.DB) error {
 	return db.Exec(`CREATE EXTENSION IF NOT EXISTS pgcrypto`).Error
+}
+
+func migrateDiseaseKindColumn(db *gorm.DB) error {
+	if !db.Migrator().HasTable(&DiseaseModel{}) {
+		return nil
+	}
+
+	if db.Migrator().HasColumn(&DiseaseModel{}, "kind") {
+		return nil
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Exec(`
+			ALTER TABLE diseases
+			ADD COLUMN IF NOT EXISTS kind varchar(50)
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			UPDATE diseases
+			SET kind = 'penyakit'
+			WHERE kind IS NULL OR kind = ''
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE diseases
+			ALTER COLUMN kind SET NOT NULL
+		`).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 func migrateFeedbackIDsToUUID(db *gorm.DB) error {
