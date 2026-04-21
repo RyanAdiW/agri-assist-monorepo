@@ -44,7 +44,7 @@ type Symptom struct {
 }
 
 type DiseaseSymptom struct {
-	SymptomID string `json:"symptomId"`
+	SymptomID string `json:"symptom_id"`
 	Weight    int    `json:"weight"`
 }
 
@@ -55,7 +55,7 @@ type Treatment struct {
 
 type Disease struct {
 	ID           string           `json:"id"`
-	CropID       string           `json:"cropId"`
+	CropID       string           `json:"crop_id"`
 	Name         string           `json:"name"`
 	Description  string           `json:"description"`
 	SymptomRules []DiseaseSymptom `json:"symptoms"`
@@ -63,14 +63,14 @@ type Disease struct {
 }
 
 type SymptomsResponse struct {
-	CropID   string    `json:"cropId"`
-	CropName string    `json:"cropName"`
+	CropID   string    `json:"crop_id"`
+	CropName string    `json:"crop_name"`
 	Symptoms []Symptom `json:"symptoms"`
 }
 
 type DiagnosisRequest struct {
-	CropID     string   `json:"cropId"`
-	SymptomIDs []string `json:"symptomIds"`
+	CropID     string   `json:"crop_id"`
+	SymptomIDs []string `json:"symptom_ids"`
 }
 
 type TreatmentPillar struct {
@@ -84,17 +84,17 @@ type DiagnosisCandidate struct {
 	Name              string            `json:"name"`
 	Description       string            `json:"description"`
 	Score             float64           `json:"score"`
-	ConfidenceLabel   ConfidenceLabel   `json:"confidenceLabel"`
-	MatchedSymptomIDs []string          `json:"matchedSymptomIds"`
-	TreatmentPillars  []TreatmentPillar `json:"treatmentPillars"`
+	ConfidenceLabel   ConfidenceLabel   `json:"confidence_label"`
+	MatchedSymptomIDs []string          `json:"matched_symptom_ids"`
+	TreatmentPillars  []TreatmentPillar `json:"treatment_pillars"`
 }
 
 type DiagnosisResponse struct {
-	CropID                string               `json:"cropId"`
-	CropName              string               `json:"cropName"`
-	HasConfidentDiagnosis bool                 `json:"hasConfidentDiagnosis"`
+	CropID                string               `json:"crop_id"`
+	CropName              string               `json:"crop_name"`
+	HasConfidentDiagnosis bool                 `json:"has_confident_diagnosis"`
 	Message               string               `json:"message"`
-	SelectedSymptomIDs    []string             `json:"selectedSymptomIds"`
-	GeneratedAt           string               `json:"generatedAt"`
+	SelectedSymptomIDs    []string             `json:"selected_symptom_ids"`
+	GeneratedAt           string               `json:"generated_at"`
 	Candidates            []DiagnosisCandidate `json:"candidates"`
 }

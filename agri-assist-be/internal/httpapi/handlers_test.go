@@ -19,7 +19,7 @@ func TestDiagnoseEndpoint(t *testing.T) {
 	t.Parallel()
 
 	server := newTestServer()
-	body := []byte(`{"cropId":"cabai","symptomIds":["buah-bercak-hitam","buah-busuk-basah","bunga-rontok"]}`)
+	body := []byte(`{"crop_id":"cabai","symptom_ids":["buah-bercak-hitam","buah-busuk-basah","bunga-rontok"]}`)
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/diagnoses", bytes.NewReader(body))
 	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	recorder := httptest.NewRecorder()
@@ -35,8 +35,8 @@ func TestDiagnoseEndpoint(t *testing.T) {
 		t.Fatalf("unmarshal response: %v", err)
 	}
 
-	if response["cropId"] != "cabai" {
-		t.Fatalf("expected cropId cabai, got %#v", response["cropId"])
+	if response["crop_id"] != "cabai" {
+		t.Fatalf("expected crop_id cabai, got %#v", response["crop_id"])
 	}
 }
 
@@ -44,7 +44,7 @@ func TestSaveFeedbackEndpoint(t *testing.T) {
 	t.Parallel()
 
 	server := newTestServer()
-	body := []byte(`{"diagnosisId":"antraknosa","isHelpful":true,"notes":"Cocok di lapangan"}`)
+	body := []byte(`{"diagnosis_id":"antraknosa","is_helpful":true,"notes":"Cocok di lapangan"}`)
 	request := httptest.NewRequest(http.MethodPost, "/api/v1/feedbacks", bytes.NewReader(body))
 	request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	recorder := httptest.NewRecorder()

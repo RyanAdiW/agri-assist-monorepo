@@ -9,14 +9,14 @@ import (
 var ErrDiagnosisIDRequired = errors.New("diagnosis id is required")
 
 type Submission struct {
-	DiagnosisID string `json:"diagnosisId"`
-	IsHelpful   bool   `json:"isHelpful"`
+	DiagnosisID string `json:"diagnosis_id"`
+	IsHelpful   bool   `json:"is_helpful"`
 	Notes       string `json:"notes,omitempty"`
 }
 
 type Result struct {
 	Status      string     `json:"status"`
-	SubmittedAt string     `json:"submittedAt"`
+	SubmittedAt string     `json:"submitted_at"`
 	Payload     Submission `json:"payload"`
 }
 

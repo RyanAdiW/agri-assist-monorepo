@@ -31,7 +31,12 @@ func (h *Handler) Health(c echo.Context) error {
 }
 
 func (h *Handler) ListSymptoms(c echo.Context) error {
-	response, err := h.diagnosisService.ListSymptoms(c.Request().Context(), c.QueryParam("cropId"))
+	cropID := c.QueryParam("crop_id")
+	if cropID == "" {
+		cropID = c.QueryParam("cropId")
+	}
+
+	response, err := h.diagnosisService.ListSymptoms(c.Request().Context(), cropID)
 	if err != nil {
 		return writeError(c, err)
 	}
@@ -77,14 +82,14 @@ func writeError(c echo.Context, err error) error {
 	}
 
 	if errors.Is(err, feedbackdomain.ErrDiagnosisIDRequired) {
-		return c.JSON(http.StatusBadRequest, errorResponse{Error: "diagnosisId is required"})
+		return c.JSON(http.StatusBadRequest, errorResponse{Error: "diagnosis_id is required"})
 	}
 
 	var unknownSymptomsErr diagnosisusecase.UnknownSymptomsError
 	if errors.As(err, &unknownSymptomsErr) {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"error":      "unknown symptom ids",
-			"symptomIds": unknownSymptomsErr.SymptomIDs,
+			"error":       "unknown symptom ids",
+			"symptom_ids": unknownSymptomsErr.SymptomIDs,
 		})
 	}
 

@@ -45,7 +45,7 @@ paths:
       summary: List symptoms for a crop
       parameters:
         - in: query
-          name: cropId
+          name: crop_id
           required: false
           description: Crop ID. Defaults to `cabai`.
           schema:
@@ -84,8 +84,8 @@ paths:
             schema:
               $ref: "#/components/schemas/DiagnosisRequest"
             example:
-              cropId: cabai
-              symptomIds:
+              crop_id: cabai
+              symptom_ids:
                 - buah-bercak-hitam
                 - buah-busuk-basah
                 - bunga-rontok
@@ -128,8 +128,8 @@ paths:
             schema:
               $ref: "#/components/schemas/FeedbackSubmission"
             example:
-              diagnosisId: antraknosa
-              isHelpful: true
+              diagnosis_id: antraknosa
+              is_helpful: true
               notes: Cocok di lapangan
       responses:
         "201":
@@ -139,7 +139,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FeedbackResult"
         "400":
-          description: Invalid request or missing diagnosisId
+          description: Invalid request or missing diagnosis_id
           content:
             application/json:
               schema:
@@ -177,13 +177,13 @@ components:
         error:
           type: string
           example: unknown symptom ids
-        symptomIds:
+        symptom_ids:
           type: array
           items:
             type: string
       required:
         - error
-        - symptomIds
+        - symptom_ids
     Symptom:
       type: object
       properties:
@@ -207,10 +207,10 @@ components:
     SymptomsResponse:
       type: object
       properties:
-        cropId:
+        crop_id:
           type: string
           example: cabai
-        cropName:
+        crop_name:
           type: string
           example: Cabai
         symptoms:
@@ -218,16 +218,16 @@ components:
           items:
             $ref: "#/components/schemas/Symptom"
       required:
-        - cropId
-        - cropName
+        - crop_id
+        - crop_name
         - symptoms
     DiagnosisRequest:
       type: object
       properties:
-        cropId:
+        crop_id:
           type: string
           example: cabai
-        symptomIds:
+        symptom_ids:
           type: array
           items:
             type: string
@@ -236,7 +236,7 @@ components:
             - buah-busuk-basah
             - bunga-rontok
       required:
-        - symptomIds
+        - symptom_ids
     TreatmentPillar:
       type: object
       properties:
@@ -269,14 +269,14 @@ components:
           type: number
           format: float
           example: 0.917
-        confidenceLabel:
+        confidence_label:
           type: string
           example: tinggi
-        matchedSymptomIds:
+        matched_symptom_ids:
           type: array
           items:
             type: string
-        treatmentPillars:
+        treatment_pillars:
           type: array
           items:
             $ref: "#/components/schemas/TreatmentPillar"
@@ -285,24 +285,24 @@ components:
         - name
         - description
         - score
-        - confidenceLabel
-        - matchedSymptomIds
-        - treatmentPillars
+        - confidence_label
+        - matched_symptom_ids
+        - treatment_pillars
     DiagnosisResponse:
       type: object
       properties:
-        cropId:
+        crop_id:
           type: string
           example: cabai
-        cropName:
+        crop_name:
           type: string
           example: Cabai
-        hasConfidentDiagnosis:
+        has_confident_diagnosis:
           type: boolean
           example: true
         message:
           type: string
-        selectedSymptomIds:
+        selected_symptom_ids:
           type: array
           items:
             type: string
@@ -310,7 +310,7 @@ components:
             - buah-bercak-hitam
             - buah-busuk-basah
             - bunga-rontok
-        generatedAt:
+        generated_at:
           type: string
           format: date-time
         candidates:
@@ -318,40 +318,40 @@ components:
           items:
             $ref: "#/components/schemas/DiagnosisCandidate"
       required:
-        - cropId
-        - cropName
-        - hasConfidentDiagnosis
+        - crop_id
+        - crop_name
+        - has_confident_diagnosis
         - message
-        - selectedSymptomIds
-        - generatedAt
+        - selected_symptom_ids
+        - generated_at
         - candidates
     FeedbackSubmission:
       type: object
       properties:
-        diagnosisId:
+        diagnosis_id:
           type: string
           example: antraknosa
-        isHelpful:
+        is_helpful:
           type: boolean
           example: true
         notes:
           type: string
           example: Cocok di lapangan
       required:
-        - diagnosisId
-        - isHelpful
+        - diagnosis_id
+        - is_helpful
     FeedbackResult:
       type: object
       properties:
         status:
           type: string
           example: saved
-        submittedAt:
+        submitted_at:
           type: string
           format: date-time
         payload:
           $ref: "#/components/schemas/FeedbackSubmission"
       required:
         - status
-        - submittedAt
+        - submitted_at
         - payload

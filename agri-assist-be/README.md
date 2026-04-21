@@ -3,7 +3,7 @@
 Backend API untuk diagnosis tanaman cabai berbasis gejala. Implementasi ini sudah menyediakan:
 
 - `GET /health` dan `GET /api/v1/health`
-- `GET /api/v1/symptoms?cropId=cabai`
+- `GET /api/v1/symptoms?crop_id=cabai`
 - `POST /api/v1/diagnoses`
 - `POST /api/v1/feedbacks`
 - `GET /swagger` untuk dokumentasi API berbasis Swagger UI
@@ -75,17 +75,17 @@ docker run --name agri-assist-postgres \
 ## Contoh Request
 
 ```bash
-curl http://localhost:8080/api/v1/symptoms?cropId=cabai
+curl http://localhost:8080/api/v1/symptoms?crop_id=cabai
 ```
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/diagnoses \
   -H "Content-Type: application/json" \
-  -d "{\"cropId\":\"cabai\",\"symptomIds\":[\"buah-bercak-hitam\",\"buah-busuk-basah\",\"bunga-rontok\"]}"
+  -d "{\"crop_id\":\"cabai\",\"symptom_ids\":[\"buah-bercak-hitam\",\"buah-busuk-basah\",\"bunga-rontok\"]}"
 ```
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/feedbacks \
   -H "Content-Type: application/json" \
-  -d "{\"diagnosisId\":\"antraknosa\",\"isHelpful\":true,\"notes\":\"Cocok di lapangan\"}"
+  -d "{\"diagnosis_id\":\"antraknosa\",\"is_helpful\":true,\"notes\":\"Cocok di lapangan\"}"
 ```
