@@ -6,6 +6,7 @@ Backend API untuk diagnosis tanaman cabai berbasis gejala. Implementasi ini suda
 - `GET /api/v1/symptoms?cropId=cabai`
 - `POST /api/v1/diagnoses`
 - `POST /api/v1/feedbacks`
+- `GET /swagger` untuk dokumentasi API berbasis Swagger UI
 
 Arsitektur dibuat sederhana bergaya hexagonal:
 
@@ -24,10 +25,12 @@ Gunakan Go `1.22` atau lebih baru dan PostgreSQL yang bisa diakses dari backend.
 
 ## Environment
 
-Salin `.env.example` lalu sesuaikan koneksi PostgreSQL. Backend mendukung dua cara konfigurasi:
+Salin `.env.example` menjadi `.env` lalu sesuaikan koneksi PostgreSQL. Backend akan membaca `.env` otomatis saat startup. Konfigurasi bisa memakai dua cara:
 
 - `DATABASE_URL`
 - atau kombinasi `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_SSLMODE`, `DB_TIMEZONE`
+
+Jika PostgreSQL dijalankan lewat Docker Desktop dan backend dijalankan dari WSL, `localhost` biasanya tetap bisa dipakai. Bila koneksi tetap gagal, ubah `DB_HOST` menjadi `host.docker.internal`.
 
 ## Menjalankan
 
@@ -45,6 +48,18 @@ make run
 ```
 
 Server akan aktif di `http://localhost:8080` kecuali `PORT` diubah.
+
+Swagger UI tersedia di:
+
+```bash
+http://localhost:8080/swagger
+```
+
+OpenAPI spec mentah tersedia di:
+
+```bash
+http://localhost:8080/swagger/openapi.yaml
+```
 
 Contoh menjalankan PostgreSQL lokal dengan Docker:
 

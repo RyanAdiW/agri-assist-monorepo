@@ -2,10 +2,10 @@ package usecase
 
 import (
 	"context"
-	"strconv"
 	"time"
 
 	"agri-assist-be/internal/feedback/domain"
+	"github.com/google/uuid"
 )
 
 type Service struct {
@@ -28,7 +28,7 @@ func (s *Service) Save(ctx context.Context, submission domain.Submission) (domai
 
 	submittedAt := s.now().UTC()
 	record := domain.Record{
-		ID:          strconv.FormatInt(submittedAt.UnixNano(), 10),
+		ID:          uuid.NewString(),
 		DiagnosisID: normalized.DiagnosisID,
 		IsHelpful:   normalized.IsHelpful,
 		Notes:       normalized.Notes,

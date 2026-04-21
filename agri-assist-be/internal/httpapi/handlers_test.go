@@ -56,6 +56,24 @@ func TestSaveFeedbackEndpoint(t *testing.T) {
 	}
 }
 
+func TestSwaggerSpecEndpoint(t *testing.T) {
+	t.Parallel()
+
+	server := newTestServer()
+	request := httptest.NewRequest(http.MethodGet, "/swagger/openapi.yaml", nil)
+	recorder := httptest.NewRecorder()
+
+	server.echo.ServeHTTP(recorder, request)
+
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", recorder.Code)
+	}
+
+	if body := recorder.Body.String(); body == "" {
+		t.Fatal("expected swagger spec body")
+	}
+}
+
 func newTestServer() *Server {
 	catalogRepo := diagnosismemory.NewCatalogRepository(seed.CabaiDataset())
 	feedbackRepo := feedbackmemory.NewRepository()

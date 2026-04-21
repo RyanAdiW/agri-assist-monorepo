@@ -1,0 +1,357 @@
+openapi: 3.0.3
+info:
+  title: Agri-Assist Backend API
+  version: 1.0.0
+  description: |
+    API documentation for Agri-Assist backend.
+    This service provides crop symptom lookup, diagnosis recommendations, and feedback submission.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+tags:
+  - name: Health
+  - name: Symptoms
+  - name: Diagnoses
+  - name: Feedbacks
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Service health check
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /api/v1/health:
+    get:
+      tags:
+        - Health
+      summary: Versioned service health check
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /api/v1/symptoms:
+    get:
+      tags:
+        - Symptoms
+      summary: List symptoms for a crop
+      parameters:
+        - in: query
+          name: cropId
+          required: false
+          description: Crop ID. Defaults to `cabai`.
+          schema:
+            type: string
+            example: cabai
+      responses:
+        "200":
+          description: Symptoms returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SymptomsResponse"
+        "404":
+          description: Crop not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: crop not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/diagnoses:
+    post:
+      tags:
+        - Diagnoses
+      summary: Diagnose crop issues from selected symptoms
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiagnosisRequest"
+            example:
+              cropId: cabai
+              symptomIds:
+                - buah-bercak-hitam
+                - buah-busuk-basah
+                - bunga-rontok
+      responses:
+        "200":
+          description: Diagnosis calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosisResponse"
+        "400":
+          description: Invalid request or unknown symptoms
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/ErrorResponse"
+                  - $ref: "#/components/schemas/UnknownSymptomsErrorResponse"
+        "404":
+          description: Crop not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/feedbacks:
+    post:
+      tags:
+        - Feedbacks
+      summary: Save diagnosis feedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackSubmission"
+            example:
+              diagnosisId: antraknosa
+              isHelpful: true
+              notes: Cocok di lapangan
+      responses:
+        "201":
+          description: Feedback saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeedbackResult"
+        "400":
+          description: Invalid request or missing diagnosisId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        service:
+          type: string
+          example: agri-assist-backend
+      required:
+        - status
+        - service
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+    UnknownSymptomsErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: unknown symptom ids
+        symptomIds:
+          type: array
+          items:
+            type: string
+      required:
+        - error
+        - symptomIds
+    Symptom:
+      type: object
+      properties:
+        id:
+          type: string
+          example: daun-menguning
+        name:
+          type: string
+          example: Daun menguning tidak merata
+        category:
+          type: string
+          example: daun
+        hint:
+          type: string
+          example: Warna daun berubah pucat lalu menguning.
+      required:
+        - id
+        - name
+        - category
+        - hint
+    SymptomsResponse:
+      type: object
+      properties:
+        cropId:
+          type: string
+          example: cabai
+        cropName:
+          type: string
+          example: Cabai
+        symptoms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Symptom"
+      required:
+        - cropId
+        - cropName
+        - symptoms
+    DiagnosisRequest:
+      type: object
+      properties:
+        cropId:
+          type: string
+          example: cabai
+        symptomIds:
+          type: array
+          items:
+            type: string
+          example:
+            - buah-bercak-hitam
+            - buah-busuk-basah
+            - bunga-rontok
+      required:
+        - symptomIds
+    TreatmentPillar:
+      type: object
+      properties:
+        category:
+          type: string
+          example: alami
+        title:
+          type: string
+          example: Penanganan alami
+        items:
+          type: array
+          items:
+            type: string
+      required:
+        - category
+        - title
+        - items
+    DiagnosisCandidate:
+      type: object
+      properties:
+        id:
+          type: string
+          example: antraknosa
+        name:
+          type: string
+          example: Patek / Antraknosa
+        description:
+          type: string
+        score:
+          type: number
+          format: float
+          example: 0.917
+        confidenceLabel:
+          type: string
+          example: tinggi
+        matchedSymptomIds:
+          type: array
+          items:
+            type: string
+        treatmentPillars:
+          type: array
+          items:
+            $ref: "#/components/schemas/TreatmentPillar"
+      required:
+        - id
+        - name
+        - description
+        - score
+        - confidenceLabel
+        - matchedSymptomIds
+        - treatmentPillars
+    DiagnosisResponse:
+      type: object
+      properties:
+        cropId:
+          type: string
+          example: cabai
+        cropName:
+          type: string
+          example: Cabai
+        hasConfidentDiagnosis:
+          type: boolean
+          example: true
+        message:
+          type: string
+        selectedSymptomIds:
+          type: array
+          items:
+            type: string
+          example:
+            - buah-bercak-hitam
+            - buah-busuk-basah
+            - bunga-rontok
+        generatedAt:
+          type: string
+          format: date-time
+        candidates:
+          type: array
+          items:
+            $ref: "#/components/schemas/DiagnosisCandidate"
+      required:
+        - cropId
+        - cropName
+        - hasConfidentDiagnosis
+        - message
+        - selectedSymptomIds
+        - generatedAt
+        - candidates
+    FeedbackSubmission:
+      type: object
+      properties:
+        diagnosisId:
+          type: string
+          example: antraknosa
+        isHelpful:
+          type: boolean
+          example: true
+        notes:
+          type: string
+          example: Cocok di lapangan
+      required:
+        - diagnosisId
+        - isHelpful
+    FeedbackResult:
+      type: object
+      properties:
+        status:
+          type: string
+          example: saved
+        submittedAt:
+          type: string
+          format: date-time
+        payload:
+          $ref: "#/components/schemas/FeedbackSubmission"
+      required:
+        - status
+        - submittedAt
+        - payload

@@ -64,7 +64,7 @@ func (TreatmentModel) TableName() string {
 }
 
 type FeedbackModel struct {
-	ID          string    `gorm:"primaryKey;size:50"`
+	ID          string    `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 	DiagnosisID string    `gorm:"size:100;not null;index"`
 	IsHelpful   bool      `gorm:"not null"`
 	Notes       string    `gorm:"type:text"`
