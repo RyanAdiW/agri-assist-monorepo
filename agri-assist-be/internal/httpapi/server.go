@@ -39,6 +39,9 @@ func (s *Server) Start(address string) error {
 
 func registerRoutes(e *echo.Echo, handler *Handler) {
 	e.GET("/health", handler.Health)
+	e.GET("/swagger", handler.SwaggerRedirect)
+	e.GET("/swagger/index.html", handler.SwaggerUI)
+	e.GET("/swagger/openapi.yaml", handler.SwaggerSpec)
 
 	v1 := e.Group("/api/v1")
 	v1.GET("/health", handler.Health)

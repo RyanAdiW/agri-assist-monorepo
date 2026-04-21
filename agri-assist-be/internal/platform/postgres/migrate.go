@@ -8,6 +8,10 @@ import (
 )
 
 func MigrateAndSeed(db *gorm.DB, dataset seed.Dataset) error {
+	if err := ensurePostgresExtensions(db); err != nil {
+		return fmt.Errorf("enable postgres extensions: %w", err)
+	}
+
 	if err := db.AutoMigrate(
 		&CropModel{},
 		&SymptomModel{},
@@ -19,11 +23,105 @@ func MigrateAndSeed(db *gorm.DB, dataset seed.Dataset) error {
 		return fmt.Errorf("auto migrate postgres schema: %w", err)
 	}
 
+	if err := migrateFeedbackIDsToUUID(db); err != nil {
+		return fmt.Errorf("migrate feedback ids to uuid: %w", err)
+	}
+
+	if err := db.AutoMigrate(&FeedbackModel{}); err != nil {
+		return fmt.Errorf("sync feedback schema after uuid migration: %w", err)
+	}
+
 	if err := seedDataset(db, dataset); err != nil {
 		return fmt.Errorf("seed postgres catalog: %w", err)
 	}
 
 	return nil
+}
+
+func ensurePostgresExtensions(db *gorm.DB) error {
+	return db.Exec(`CREATE EXTENSION IF NOT EXISTS pgcrypto`).Error
+}
+
+func migrateFeedbackIDsToUUID(db *gorm.DB) error {
+	if !db.Migrator().HasTable(&FeedbackModel{}) {
+		return nil
+	}
+
+	var dataType string
+	if err := db.Raw(`
+		SELECT data_type
+		FROM information_schema.columns
+		WHERE table_schema = current_schema()
+		  AND table_name = 'feedbacks'
+		  AND column_name = 'id'
+	`).Scan(&dataType).Error; err != nil {
+		return err
+	}
+
+	if dataType == "" || dataType == "uuid" {
+		return nil
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			ADD COLUMN IF NOT EXISTS id_uuid uuid DEFAULT gen_random_uuid()
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			UPDATE feedbacks
+			SET id_uuid = gen_random_uuid()
+			WHERE id_uuid IS NULL
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			ALTER COLUMN id_uuid SET NOT NULL
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			DROP CONSTRAINT IF EXISTS feedbacks_pkey
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			DROP COLUMN id
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			RENAME COLUMN id_uuid TO id
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			ADD CONSTRAINT feedbacks_pkey PRIMARY KEY (id)
+		`).Error; err != nil {
+			return err
+		}
+
+		if err := tx.Exec(`
+			ALTER TABLE feedbacks
+			ALTER COLUMN id SET DEFAULT gen_random_uuid()
+		`).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 func seedDataset(db *gorm.DB, dataset seed.Dataset) error {
