@@ -18,7 +18,7 @@ func TestDiagnoseReturnsConfidentCandidates(t *testing.T) {
 	result, err := service.Diagnose(context.Background(), diagnosisRequest(
 		"buah-bercak-hitam",
 		"buah-busuk-basah",
-		"bunga-rontok",
+		"buah-keriput-mengering",
 	))
 	if err != nil {
 		t.Fatalf("Diagnose() error = %v", err)
@@ -46,7 +46,7 @@ func TestDiagnoseReturnsLowConfidenceFallback(t *testing.T) {
 
 	service := NewService(diagnosismemory.NewCatalogRepository(seed.CabaiDataset()))
 
-	result, err := service.Diagnose(context.Background(), diagnosisRequest("daun-berlubang"))
+	result, err := service.Diagnose(context.Background(), diagnosisRequest("embun-madu"))
 	if err != nil {
 		t.Fatalf("Diagnose() error = %v", err)
 	}

@@ -1,108 +1,333 @@
 import { type DiseaseSeed, type Symptom } from "@/lib/types";
 
+// Derived from the PDF source
+// "Hama dan Penyakit pada Tanaman Cabai Serta Pengendaliannya" (BPTP Jambi, 2014).
+// Rule weights are inferred from the hallmark symptoms described in the document.
 export const symptoms: Symptom[] = [
   {
     id: "daun-menguning",
-    name: "Daun menguning tidak merata",
+    name: "Daun menguning mulai dari bagian bawah",
     category: "daun",
-    hint: "Warna daun berubah pucat lalu menguning."
+    hint: "Warna daun berubah pucat lalu menguning dan menjalar ke atas."
   },
   {
     id: "daun-keriting",
-    name: "Daun menggulung atau keriting",
+    name: "Daun mengeriting atau menggulung",
     category: "daun",
-    hint: "Permukaan daun tampak mengerut dan mengecil."
+    hint: "Daun tampak keriput, mengeriting, atau menggulung."
   },
   {
     id: "bercak-coklat-daun",
-    name: "Bercak coklat pada daun",
+    name: "Daun memiliki bercak bulat coklat",
     category: "daun",
-    hint: "Ada bercak kecil yang meluas pada helaian daun."
+    hint: "Bercak coklat tampak jelas pada daun dan dapat meluas."
   },
   {
     id: "batang-layu",
-    name: "Batang dan pucuk tampak layu",
+    name: "Tanaman tampak layu bertahap",
     category: "batang",
-    hint: "Tanaman terlihat turun dan lemas walau tanah masih lembap."
+    hint: "Daun, batang, atau pucuk terlihat turun dan lemas."
   },
   {
-    id: "pangkal-busuk",
-    name: "Pangkal batang terlihat busuk",
-    category: "batang",
-    hint: "Area pangkal batang tampak gelap, lunak, atau berair."
+    id: "titik-hitam-pangkal-buah",
+    name: "Ada titik hitam pada pangkal buah",
+    category: "buah",
+    hint: "Pada pangkal buah terlihat titik hitam bekas tusukan."
   },
   {
     id: "buah-bercak-hitam",
-    name: "Buah memiliki bercak hitam cekung",
+    name: "Buah bercak cekung hitam atau coklat",
     category: "buah",
-    hint: "Bercak hitam muncul pada permukaan buah dan tampak masuk ke dalam."
+    hint: "Bercak cekung gelap muncul pada kulit buah."
   },
   {
     id: "buah-busuk-basah",
-    name: "Buah membusuk basah",
+    name: "Buah membusuk dan mudah jatuh",
     category: "buah",
-    hint: "Buah menjadi lembek dan cepat rusak."
+    hint: "Buah cepat busuk, lunak, lalu jatuh ke tanah."
   },
   {
     id: "bunga-rontok",
-    name: "Bunga atau bakal buah mudah rontok",
+    name: "Tunas atau bunga mudah gugur",
     category: "buah",
-    hint: "Bunga jatuh sebelum berkembang menjadi buah."
+    hint: "Bunga atau tunas muda mudah rontok sebelum berkembang."
   },
   {
     id: "akar-coklat",
-    name: "Akar berubah coklat dan lemah",
+    name: "Akar atau pangkal batang berwarna coklat",
     category: "akar",
-    hint: "Akar tampak gelap dan tidak segar."
+    hint: "Jaringan akar atau batang bawah tampak kecoklatan."
   },
   {
     id: "tanaman-kerdil",
-    name: "Pertumbuhan tanaman kerdil",
+    name: "Pertumbuhan tanaman terhambat atau kerdil",
     category: "umum",
-    hint: "Tanaman terlihat lebih kecil dan lambat berkembang."
+    hint: "Tanaman tumbuh lambat dan ukuran keseluruhan mengecil."
   },
   {
     id: "kutu-halus",
-    name: "Ada kutu halus di bawah daun",
+    name: "Ada koloni kutu di bawah daun",
     category: "umum",
-    hint: "Terlihat serangga kecil yang aktif di permukaan bawah daun."
+    hint: "Serangga kecil tampak bergerombol pada permukaan bawah daun."
   },
   {
-    id: "daun-berlubang",
-    name: "Daun berlubang atau rusak gigitan",
+    id: "daun-bercak-keperakan",
+    name: "Daun tampak berbercak keperakan",
+    category: "daun",
+    hint: "Permukaan daun terlihat keperakan terutama pada daun muda."
+  },
+  {
+    id: "pucuk-benjol-menggulung",
+    name: "Pucuk menggulung dengan benjolan",
     category: "umum",
-    hint: "Terdapat sobekan atau lubang acak pada daun."
+    hint: "Pucuk menggulung ke dalam dan tampak benjol seperti tumor."
+  },
+  {
+    id: "embun-jelaga-hitam",
+    name: "Daun atau buah tertutup jelaga hitam",
+    category: "umum",
+    hint: "Permukaan tanaman tampak hitam karena embun jelaga."
+  },
+  {
+    id: "daun-keriput-kekuningan",
+    name: "Daun keriput dengan warna kekuningan",
+    category: "daun",
+    hint: "Daun berkerut, kekuningan, dan tampak tidak sehat."
+  },
+  {
+    id: "embun-madu",
+    name: "Ada embun madu lengket pada tanaman",
+    category: "umum",
+    hint: "Permukaan tanaman terasa lengket karena cairan manis hama."
+  },
+  {
+    id: "daun-menebal-kecokelatan",
+    name: "Daun menebal dan berwarna kecokelatan",
+    category: "daun",
+    hint: "Daun menebal, terasa kaku, dan berubah warna tembaga atau coklat."
+  },
+  {
+    id: "daun-kaku-melengkung-bawah",
+    name: "Daun kaku dan melengkung ke bawah",
+    category: "daun",
+    hint: "Daun menyusut, kaku, lalu melengkung ke bawah."
+  },
+  {
+    id: "hifa-putih-kapas",
+    name: "Luka tertutup hifa putih seperti kapas",
+    category: "batang",
+    hint: "Pada bagian terinfeksi tampak hifa putih menyerupai kapas."
+  },
+  {
+    id: "layu-daun-tetap-hijau",
+    name: "Tanaman layu mendadak tetapi daun tetap hijau",
+    category: "umum",
+    hint: "Seluruh tanaman layu permanen namun warna daun masih hijau."
+  },
+  {
+    id: "cairan-keruh-batang",
+    name: "Batang mengeluarkan cairan keruh saat dipotong",
+    category: "batang",
+    hint: "Bila batang dicelupkan ke air, keluar lendir keruh seperti asap."
+  },
+  {
+    id: "buah-kuning-pucat-layu",
+    name: "Buah menjadi kuning pucat dan layu",
+    category: "buah",
+    hint: "Buah berubah pucat, layu, dan kualitasnya menurun."
+  },
+  {
+    id: "buah-keriput-mengering",
+    name: "Buah keriput dan mengering seperti jerami",
+    category: "buah",
+    hint: "Buah menghitam, keriput, lalu mengering."
+  },
+  {
+    id: "vein-clearing-daun-pucuk",
+    name: "Daun pucuk mengalami vein clearing",
+    category: "daun",
+    hint: "Daun pucuk menampakkan tulang daun yang tampak jernih."
+  },
+  {
+    id: "daun-kuning-menggulung-atas",
+    name: "Daun menguning dan menggulung ke atas",
+    category: "daun",
+    hint: "Daun menguning jelas dengan tulang daun menebal dan tepi menggulung ke atas."
+  },
+  {
+    id: "daun-mengecil-kuning-terang",
+    name: "Daun mengecil dan kuning terang",
+    category: "daun",
+    hint: "Daun menjadi kecil, sempit, dan kuning terang."
+  },
+  {
+    id: "tidak-berbuah",
+    name: "Tanaman tidak berbuah atau buah kecil mudah gugur",
+    category: "buah",
+    hint: "Pembentukan buah terganggu atau buah kecil cepat gugur."
+  },
+  {
+    id: "pusat-bercak-pucat-berlubang",
+    name: "Pusat bercak pucat dan daun berlubang",
+    category: "daun",
+    hint: "Bagian tengah bercak memucat hingga daun terlihat berlubang."
+  },
+  {
+    id: "daun-layu-rontok",
+    name: "Daun layu lalu rontok",
+    category: "daun",
+    hint: "Daun yang terserang cepat layu dan akhirnya rontok."
   }
 ];
 
 export const diseases: DiseaseSeed[] = [
   {
-    id: "antraknosa",
-    name: "Patek / Antraknosa",
+    id: "thrips",
+    name: "Thrips",
     description:
-      "Jamur menyerang buah cabai dan memicu bercak cekung gelap yang cepat meluas pada musim lembap.",
+      "Hama penghisap permukaan bawah daun muda yang menimbulkan bercak keperakan, pucuk menggulung, dan tanaman kerdil serta dapat menjadi vektor virus.",
     symptoms: [
-      { symptomId: "buah-bercak-hitam", weight: 5 },
-      { symptomId: "buah-busuk-basah", weight: 4 },
-      { symptomId: "bunga-rontok", weight: 2 },
-      { symptomId: "bercak-coklat-daun", weight: 1 }
+      { symptomId: "daun-bercak-keperakan", weight: 5 },
+      { symptomId: "daun-keriting", weight: 4 },
+      { symptomId: "pucuk-benjol-menggulung", weight: 5 },
+      { symptomId: "daun-menebal-kecokelatan", weight: 3 },
+      { symptomId: "tanaman-kerdil", weight: 2 }
     ],
     treatments: {
       alami: [
-        "Pisahkan dan buang buah yang sudah parah agar penyebaran tidak meluas.",
-        "Semprot ekstrak bawang putih atau serai pada sore hari sebagai langkah bantu."
+        "Lakukan sanitasi lingkungan dan potong bagian tanaman yang terserang thrips."
       ],
       pencegahan: [
-        "Perbaiki sirkulasi udara dan hindari percikan air langsung ke buah.",
-        "Gunakan mulsa dan panen buah matang tepat waktu."
+        "Gunakan tanaman perangkap seperti kenikir kuning dan pasang mulsa perak.",
+        "Pasang perangkap warna kuning sejak tanaman berumur 2 minggu."
       ],
       organik: [
-        "Tambahkan kompos matang untuk menjaga kondisi tanah tetap seimbang.",
-        "Gunakan pupuk kandang matang secukupnya agar tanaman tidak stres."
+        "Manfaatkan musuh alami seperti kumbang Coccinellidae, larva Chrysopidae, kepik Anthocoridae, tungau predator, dan Entomophthora sp."
       ],
       kimia: [
-        "Jika serangan meluas, gunakan fungisida sesuai label dan rotasi bahan aktif.",
-        "Semprot hanya pada area terdampak dan gunakan alat pelindung."
+        "Gunakan pestisida hanya bila serangan mencapai ambang pengendalian atau cara lain tidak lagi efektif."
+      ]
+    }
+  },
+  {
+    id: "lalat-buah",
+    name: "Lalat Buah",
+    description:
+      "Hama buah yang meletakkan telur pada buah cabai sehingga buah menjadi pucat, busuk, dan mudah jatuh terutama pada musim hujan.",
+    symptoms: [
+      { symptomId: "titik-hitam-pangkal-buah", weight: 5 },
+      { symptomId: "buah-kuning-pucat-layu", weight: 4 },
+      { symptomId: "buah-busuk-basah", weight: 5 }
+    ],
+    treatments: {
+      alami: [
+        "Musnahkan buah yang terserang dan bungkus buah sehat untuk mencegah oviposisi."
+      ],
+      pencegahan: [
+        "Gunakan perangkap atraktan metil eugenol atau petrogenol sejak tanaman berumur 2 minggu hingga akhir panen.",
+        "Lakukan rotasi tanaman untuk menekan sumber serangan."
+      ],
+      organik: [
+        "Manfaatkan musuh alami seperti parasitoid Biosteres sp. dan Opius sp., semut, laba-laba, kumbang Staphylinidae, dan Dermaptera."
+      ],
+      kimia: [
+        "Gunakan pestisida yang efektif dan terdaftar bila cara lain belum mampu menekan populasi."
+      ]
+    }
+  },
+  {
+    id: "kutu-kebul",
+    name: "Kutu Kebul",
+    description:
+      "Hama pengisap daun yang menimbulkan bercak nekrotik, embun jelaga, hambatan pertumbuhan, dan berperan penting sebagai vektor berbagai virus.",
+    symptoms: [
+      { symptomId: "bercak-coklat-daun", weight: 3 },
+      { symptomId: "embun-jelaga-hitam", weight: 4 },
+      { symptomId: "tanaman-kerdil", weight: 3 },
+      { symptomId: "kutu-halus", weight: 4 }
+    ],
+    treatments: {
+      alami: ["Lakukan sanitasi lingkungan untuk mengurangi sumber serangan."],
+      pencegahan: [
+        "Gunakan perangkap kuning, tumpangsari cabai dengan Tagetes, dan tanam jagung di sekeliling lahan sebagai tanaman perangkap.",
+        "Lakukan rotasi dengan tanaman bukan inang untuk memutus siklus populasi."
+      ],
+      organik: [
+        "Manfaatkan predator, parasitoid, dan patogen serangga yang efektif terhadap Bemisia tabaci."
+      ],
+      kimia: [
+        "Gunakan insektisida selektif sebagai alternatif terakhir bila pengendalian lain tidak memadai."
+      ]
+    }
+  },
+  {
+    id: "kutu-daun-persik",
+    name: "Kutu Daun Persik",
+    description:
+      "Kutu daun yang mengisap jaringan muda, menyebabkan daun berbercak, keriting, keriput, kekuningan, dan tanaman kerdil serta menjadi vektor banyak virus.",
+    symptoms: [
+      { symptomId: "kutu-halus", weight: 5 },
+      { symptomId: "daun-keriting", weight: 4 },
+      { symptomId: "daun-keriput-kekuningan", weight: 4 },
+      { symptomId: "tanaman-kerdil", weight: 3 },
+      { symptomId: "daun-menguning", weight: 2 }
+    ],
+    treatments: {
+      alami: [
+        "Pantau tanaman muda secara rutin terutama pada musim kemarau ketika populasi meningkat."
+      ],
+      pencegahan: [],
+      organik: [
+        "Manfaatkan parasitoid Diaretiella rapae serta predator seperti kumbang macan, laba-laba, larva syrphid, dan belalang sembah."
+      ],
+      kimia: [
+        "Gunakan insektisida bila populasi melebihi ambang kendali, terutama pada tanaman muda atau menjelang panen."
+      ]
+    }
+  },
+  {
+    id: "kutu-daun",
+    name: "Kutu Daun",
+    description:
+      "Aphididae menyerang pucuk dan daun muda, menyebabkan daun mengkerut, tanaman kerdil, embun madu, dan sering diikuti jelaga hitam serta penularan virus.",
+    symptoms: [
+      { symptomId: "kutu-halus", weight: 4 },
+      { symptomId: "daun-keriting", weight: 4 },
+      { symptomId: "embun-madu", weight: 5 },
+      { symptomId: "embun-jelaga-hitam", weight: 3 },
+      { symptomId: "tanaman-kerdil", weight: 2 }
+    ],
+    treatments: {
+      alami: [
+        "Pantau pucuk tanaman pada musim kemarau karena serangan berat biasanya terjadi pada kondisi kering."
+      ],
+      pencegahan: [],
+      organik: [
+        "Infestasikan musuh alami seperti parasitoid Aphelinus gossypii dan Lysiphlebus testaceipes, predator Coccinella transversalis, atau cendawan Neozygites fresenii."
+      ],
+      kimia: []
+    }
+  },
+  {
+    id: "tungau",
+    name: "Tungau",
+    description:
+      "Tungau menyerang daun muda dengan mengisap cairan tanaman hingga daun menebal, kaku, melengkung ke bawah, bunga gugur, dan gejala memberat saat musim kemarau.",
+    symptoms: [
+      { symptomId: "daun-menebal-kecokelatan", weight: 5 },
+      { symptomId: "daun-kaku-melengkung-bawah", weight: 4 },
+      { symptomId: "daun-keriting", weight: 3 },
+      { symptomId: "bunga-rontok", weight: 3 },
+      { symptomId: "tanaman-kerdil", weight: 1 }
+    ],
+    treatments: {
+      alami: [
+        "Lakukan sanitasi dengan mengeradikasi bagian tanaman yang terserang lalu memusnahkannya."
+      ],
+      pencegahan: [],
+      organik: ["Manfaatkan predator Amblyseius cucumeris sebagai musuh alami."],
+      kimia: [
+        "Gunakan akarisida yang efektif dan terdaftar bila gejala kerusakan daun dan populasi tungau terus meningkat."
       ]
     }
   },
@@ -110,91 +335,120 @@ export const diseases: DiseaseSeed[] = [
     id: "layu-fusarium",
     name: "Layu Fusarium",
     description:
-      "Jamur tanah mengganggu pembuluh tanaman, membuat daun menguning dan tanaman layu bertahap.",
+      "Penyakit cendawan yang menyebabkan kelayuan bertahap dari daun bawah, perubahan warna jaringan akar dan batang menjadi coklat, serta munculnya hifa putih seperti kapas.",
     symptoms: [
       { symptomId: "batang-layu", weight: 5 },
       { symptomId: "daun-menguning", weight: 4 },
-      { symptomId: "akar-coklat", weight: 3 },
-      { symptomId: "pangkal-busuk", weight: 2 },
-      { symptomId: "tanaman-kerdil", weight: 1 }
+      { symptomId: "akar-coklat", weight: 4 },
+      { symptomId: "hifa-putih-kapas", weight: 4 },
+      { symptomId: "tidak-berbuah", weight: 1 }
     ],
     treatments: {
       alami: [
-        "Cabut tanaman yang sudah mati untuk menekan sumber infeksi di bedengan.",
-        "Atur penyiraman agar tanah tidak terus jenuh air."
+        "Cabut dan musnahkan tanaman yang sudah terserang untuk mencegah sumber inokulum bertahan di lahan."
       ],
+      pencegahan: [],
+      organik: [
+        "Gunakan agen antagonis Trichoderma spp. dan Gliocladium spp. bersama pemupukan dasar."
+      ],
+      kimia: ["Gunakan fungisida sesuai anjuran hanya sebagai alternatif terakhir."]
+    }
+  },
+  {
+    id: "layu-bakteri-ralstonia",
+    name: "Layu Bakteri Ralstonia",
+    description:
+      "Penyakit bakteri yang menimbulkan layu mendadak, warna daun tetap hijau, jaringan vaskuler kecoklatan, dan keluarnya cairan keruh dari batang saat diuji di air.",
+    symptoms: [
+      { symptomId: "layu-daun-tetap-hijau", weight: 5 },
+      { symptomId: "cairan-keruh-batang", weight: 5 },
+      { symptomId: "batang-layu", weight: 4 },
+      { symptomId: "akar-coklat", weight: 4 },
+      { symptomId: "buah-kuning-pucat-layu", weight: 2 },
+      { symptomId: "buah-busuk-basah", weight: 1 }
+    ],
+    treatments: {
+      alami: [],
       pencegahan: [
-        "Gunakan bibit sehat dan lakukan rotasi lahan bila memungkinkan.",
-        "Perbaiki drainase supaya akar tidak terendam terlalu lama."
+        "Lakukan pergiliran tanaman, gunakan benih sehat, dan cabut serta musnahkan tanaman sakit."
       ],
       organik: [
-        "Tambahkan bahan organik matang untuk membantu struktur tanah.",
-        "Gunakan agen hayati atau kompos aktif bila tersedia."
+        "Gunakan agen antagonis Trichoderma spp. dan Gliocladium spp. bersamaan dengan pemupukan dasar."
       ],
+      kimia: ["Gunakan bakterisida sesuai anjuran hanya sebagai alternatif terakhir."]
+    }
+  },
+  {
+    id: "antraknosa",
+    name: "Busuk Buah Antraknosa",
+    description:
+      "Penyakit buah yang ditandai bercak cekung gelap pada buah, pembusukan cepat saat lembap, dan pada serangan berat buah menjadi keriput kering seperti jerami.",
+    symptoms: [
+      { symptomId: "buah-bercak-hitam", weight: 5 },
+      { symptomId: "buah-busuk-basah", weight: 4 },
+      { symptomId: "buah-keriput-mengering", weight: 3 }
+    ],
+    treatments: {
+      alami: [
+        "Bersihkan lahan dan singkirkan tanaman atau buah yang terserang agar penyakit tidak menyebar."
+      ],
+      pencegahan: [
+        "Lakukan seleksi benih atau gunakan benih yang sehat karena patogen ini dapat terbawa benih.",
+        "Lakukan pergiliran tanaman serta potong dan musnahkan buah yang sakit."
+      ],
+      organik: [],
       kimia: [
-        "Gunakan fungisida tanah hanya sebagai opsi terakhir dan ikuti dosis label.",
-        "Fokuskan aplikasi pada titik serangan, bukan seluruh lahan secara berlebihan."
+        "Gunakan fungisida sesuai anjuran sebagai alternatif terakhir dan pastikan alat semprot bersih."
       ]
     }
   },
   {
-    id: "keriting-trips",
-    name: "Keriting Daun akibat Trips",
+    id: "virus-kuning",
+    name: "Virus Kuning",
     description:
-      "Serangan trips membuat daun keriting, bunga rontok, dan pertumbuhan tanaman terganggu.",
+      "Penyakit virus yang memicu vein clearing pada daun pucuk, daun menguning dan menggulung ke atas, tanaman kerdil, serta kegagalan pembentukan buah.",
     symptoms: [
-      { symptomId: "daun-keriting", weight: 5 },
-      { symptomId: "kutu-halus", weight: 4 },
-      { symptomId: "bunga-rontok", weight: 2 },
-      { symptomId: "tanaman-kerdil", weight: 2 },
+      { symptomId: "vein-clearing-daun-pucuk", weight: 5 },
+      { symptomId: "daun-kuning-menggulung-atas", weight: 5 },
+      { symptomId: "daun-mengecil-kuning-terang", weight: 4 },
+      { symptomId: "tanaman-kerdil", weight: 3 },
+      { symptomId: "tidak-berbuah", weight: 4 },
+      { symptomId: "kutu-halus", weight: 1 }
+    ],
+    treatments: {
+      alami: [],
+      pencegahan: [
+        "Gunakan varietas tahan seperti hotchilli dan bersihkan tanaman inang di sekitar lahan.",
+        "Tambahkan pemupukan untuk meningkatkan daya tahan tanaman, gunakan mulsa plastik, lakukan perlakuan benih, dan tanam pembatas seperti jagung atau Tagetes."
+      ],
+      organik: [
+        "Kendalikan vektor kutu kebul dengan predator seperti Menochilus sexmaculatus atau jamur Beauveria bassiana dan Verticillium lecanii."
+      ],
+      kimia: []
+    }
+  },
+  {
+    id: "bercak-daun-cercospora",
+    name: "Bercak Daun Cercospora",
+    description:
+      "Penyakit daun yang menyebabkan bercak bulat coklat, pusat bercak memucat hingga berlubang, diikuti kelayuan dan kerontokan daun terutama pada kondisi lembap.",
+    symptoms: [
+      { symptomId: "bercak-coklat-daun", weight: 5 },
+      { symptomId: "pusat-bercak-pucat-berlubang", weight: 4 },
+      { symptomId: "daun-layu-rontok", weight: 4 },
       { symptomId: "daun-menguning", weight: 1 }
     ],
     treatments: {
       alami: [
-        "Pasang perangkap warna dan buang daun yang rusak berat.",
-        "Semprot air bertekanan ringan di bawah daun pada pagi hari."
+        "Musnahkan sisa tanaman yang terinfeksi untuk menurunkan sumber patogen."
       ],
       pencegahan: [
-        "Bersihkan gulma sekitar lahan yang bisa menjadi tempat hama berkembang.",
-        "Pantau bagian bawah daun secara rutin sejak fase vegetatif."
+        "Gunakan bibit bebas patogen, lakukan perlakuan benih, perbaiki drainase, dan tanam pada musim kemarau dengan irigasi yang baik.",
+        "Lakukan pergiliran tanaman dengan tanaman non-solanaceae pada lahan yang pernah terserang."
       ],
-      organik: [
-        "Gunakan pupuk organik cair ringan untuk menjaga pemulihan tanaman.",
-        "Tambah kompos matang agar tanaman tetap kuat menghadapi stres."
-      ],
+      organik: [],
       kimia: [
-        "Bila populasi meningkat tajam, gunakan insektisida selektif sesuai label.",
-        "Rotasi bahan aktif untuk membantu menekan risiko resistensi."
-      ]
-    }
-  },
-  {
-    id: "busuk-pangkal-batang",
-    name: "Busuk Pangkal Batang",
-    description:
-      "Kondisi lembap berkepanjangan dapat memicu busuk pada pangkal batang dan akar hingga tanaman roboh.",
-    symptoms: [
-      { symptomId: "pangkal-busuk", weight: 5 },
-      { symptomId: "batang-layu", weight: 4 },
-      { symptomId: "akar-coklat", weight: 3 },
-      { symptomId: "buah-busuk-basah", weight: 2 }
-    ],
-    treatments: {
-      alami: [
-        "Kurangi genangan dan singkirkan bagian tanaman yang membusuk.",
-        "Tinggikan bedengan agar area pangkal batang lebih cepat kering."
-      ],
-      pencegahan: [
-        "Jaga jarak tanam dan sirkulasi udara agar kelembapan tidak terlalu tinggi.",
-        "Hindari penyiraman berlebih pada sore atau malam hari."
-      ],
-      organik: [
-        "Gunakan pupuk organik matang dalam jumlah seimbang agar tanah tetap gembur.",
-        "Campurkan bahan organik yang membantu drainase tetap baik."
-      ],
-      kimia: [
-        "Jika perlu, gunakan fungisida yang sesuai untuk penyakit busuk pangkal batang.",
-        "Lakukan aplikasi terbatas dan ikuti masa tunggu panen."
+        "Gunakan fungisida secara bijaksana, efektif, dan sesuai anjuran berdasarkan kondisi lapangan."
       ]
     }
   }

@@ -5,6 +5,7 @@ import (
 
 	"agri-assist-be/internal/seed"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func MigrateAndSeed(db *gorm.DB, dataset seed.Dataset) error {
@@ -125,24 +126,40 @@ func migrateFeedbackIDsToUUID(db *gorm.DB) error {
 }
 
 func seedDataset(db *gorm.DB, dataset seed.Dataset) error {
-	var count int64
-	if err := db.Model(&CropModel{}).
-		Where("id = ?", dataset.Crop.ID).
-		Count(&count).Error; err != nil {
-		return fmt.Errorf("check seeded crop: %w", err)
-	}
-
-	if count > 0 {
-		return nil
-	}
-
 	return db.Transaction(func(tx *gorm.DB) error {
 		crop := CropModel{
 			ID:   dataset.Crop.ID,
 			Name: dataset.Crop.Name,
 		}
-		if err := tx.Create(&crop).Error; err != nil {
-			return fmt.Errorf("create crop: %w", err)
+		if err := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"name"}),
+		}).Create(&crop).Error; err != nil {
+			return fmt.Errorf("upsert crop: %w", err)
+		}
+
+		diseaseIDs := tx.Model(&DiseaseModel{}).
+			Select("id").
+			Where("crop_id = ?", dataset.Crop.ID)
+
+		if err := tx.Where("disease_id IN (?)", diseaseIDs).
+			Delete(&DiseaseSymptomModel{}).Error; err != nil {
+			return fmt.Errorf("delete previous disease symptoms: %w", err)
+		}
+
+		if err := tx.Where("disease_id IN (?)", diseaseIDs).
+			Delete(&TreatmentModel{}).Error; err != nil {
+			return fmt.Errorf("delete previous treatments: %w", err)
+		}
+
+		if err := tx.Where("crop_id = ?", dataset.Crop.ID).
+			Delete(&DiseaseModel{}).Error; err != nil {
+			return fmt.Errorf("delete previous diseases: %w", err)
+		}
+
+		if err := tx.Where("crop_id = ?", dataset.Crop.ID).
+			Delete(&SymptomModel{}).Error; err != nil {
+			return fmt.Errorf("delete previous symptoms: %w", err)
 		}
 
 		symptoms := make([]SymptomModel, 0, len(dataset.Symptoms))
