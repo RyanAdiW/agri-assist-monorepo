@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { getConfidenceCopy, getSymptomName } from "@/lib/diagnosis-service";
-import type { DiagnosisCandidate } from "@/lib/types";
+import type { DiagnosisCandidate, Symptom } from "@/lib/types";
 import { formatPercent } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -22,10 +22,12 @@ const badgeVariantByConfidence = {
 
 export function ResultCard({
   candidate,
-  index
+  index,
+  symptoms
 }: {
   candidate: DiagnosisCandidate;
   index: number;
+  symptoms: Symptom[];
 }) {
   const [openCategory, setOpenCategory] = useState(
     candidate.treatmentPillars[0]?.category
@@ -60,7 +62,7 @@ export function ResultCard({
             {candidate.matchedSymptomIds.length > 0 ? (
               candidate.matchedSymptomIds.map((symptomId) => (
                 <Badge key={symptomId} variant="outline">
-                  {getSymptomName(symptomId)}
+                  {getSymptomName(symptoms, symptomId)}
                 </Badge>
               ))
             ) : (

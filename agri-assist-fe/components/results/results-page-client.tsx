@@ -19,7 +19,7 @@ import { useDiagnosis } from "@/components/providers/diagnosis-provider";
 import { ResultCard } from "@/components/results/result-card";
 
 export function ResultsPageClient() {
-  const { latestResult, feedbackResult, saveFeedback } = useDiagnosis();
+  const { latestResult, feedbackResult, saveFeedback, symptoms } = useDiagnosis();
   const [helpfulChoice, setHelpfulChoice] = useState<boolean | null>(null);
   const [notes, setNotes] = useState("");
   const [isSendingFeedback, setIsSendingFeedback] = useState(false);
@@ -54,7 +54,7 @@ export function ResultsPageClient() {
 
   const topCandidate = latestResult.candidates[0];
   const selectedSymptoms = latestResult.selectedSymptomIds.map((symptomId) =>
-    getSymptomName(symptomId)
+    getSymptomName(symptoms, symptomId)
   );
 
   const handleFeedback = async () => {
@@ -126,7 +126,12 @@ export function ResultsPageClient() {
 
         <section className="grid gap-4">
           {latestResult.candidates.map((candidate, index) => (
-            <ResultCard key={candidate.id} candidate={candidate} index={index} />
+            <ResultCard
+              key={candidate.id}
+              candidate={candidate}
+              index={index}
+              symptoms={symptoms}
+            />
           ))}
         </section>
 

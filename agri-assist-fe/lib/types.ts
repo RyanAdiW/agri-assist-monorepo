@@ -16,7 +16,7 @@ export interface Symptom {
 }
 
 export interface DiagnosisRequest {
-  cropId: "cabai";
+  cropId: string;
   symptomIds: string[];
 }
 
@@ -37,7 +37,7 @@ export interface DiagnosisCandidate {
 }
 
 export interface DiagnosisResponse {
-  cropId: "cabai";
+  cropId: string;
   cropName: string;
   hasConfidentDiagnosis: boolean;
   message: string;

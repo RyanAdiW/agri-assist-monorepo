@@ -6,6 +6,7 @@ import { DiagnosisProvider } from "@/components/providers/diagnosis-provider";
 import { DiagnosisPageClient } from "@/components/diagnosis/diagnosis-page-client";
 
 const push = vi.fn();
+const fetchMock = vi.fn();
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -14,6 +15,40 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("DiagnosisPageClient", () => {
+  beforeEach(() => {
+    push.mockReset();
+    fetchMock.mockReset();
+    vi.stubGlobal("fetch", fetchMock);
+
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: async () =>
+        JSON.stringify({
+          crop_id: "cabai",
+          crop_name: "Cabai",
+          symptoms: [
+            {
+              id: "kutu-halus",
+              name: "Ada kutu halus di bawah daun",
+              category: "umum",
+              hint: "Terlihat serangga kecil yang aktif di bawah daun."
+            },
+            {
+              id: "daun-menguning",
+              name: "Daun menguning tidak merata",
+              category: "daun",
+              hint: "Warna daun berubah pucat lalu menguning."
+            }
+          ]
+        })
+    } as Response);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("filters symptoms and enables diagnosis after a symptom is selected", async () => {
     const user = userEvent.setup();
 

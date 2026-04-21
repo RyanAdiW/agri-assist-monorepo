@@ -32,6 +32,7 @@ export function DiagnosisPageClient() {
   const router = useRouter();
   const {
     symptoms,
+    symptomsError,
     selectedSymptomIds,
     isReady,
     isSubmittingDiagnosis,
@@ -44,6 +45,7 @@ export function DiagnosisPageClient() {
     "semua"
   );
   const [submissionError, setSubmissionError] = useState("");
+  const isInteractionDisabled = !isReady || Boolean(symptomsError);
 
   const selectedSymptoms = symptoms.filter((symptom) =>
     selectedSymptomIds.includes(symptom.id)
@@ -111,7 +113,7 @@ export function DiagnosisPageClient() {
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Cari gejala, misalnya daun menguning atau bercak hitam"
               aria-label="Cari gejala"
-              disabled={!isReady}
+              disabled={isInteractionDisabled}
             />
 
             <div className="flex gap-2 overflow-x-auto pb-1">
@@ -119,7 +121,7 @@ export function DiagnosisPageClient() {
                 <button
                   key={filter}
                   type="button"
-                  disabled={!isReady}
+                  disabled={isInteractionDisabled}
                   className={cn(
                     "whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
                     activeFilter === filter
@@ -137,7 +139,13 @@ export function DiagnosisPageClient() {
 
         <section className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
           <div className="grid gap-3 sm:grid-cols-2">
-            {filteredSymptoms.length > 0 ? (
+            {symptomsError ? (
+              <Card className="sm:col-span-2">
+                <CardContent className="p-6">
+                  <p className="text-sm leading-7 text-chili-700">{symptomsError}</p>
+                </CardContent>
+              </Card>
+            ) : filteredSymptoms.length > 0 ? (
               filteredSymptoms.map((symptom) => {
                 const isSelected = selectedSymptomIds.includes(symptom.id);
 
@@ -146,7 +154,7 @@ export function DiagnosisPageClient() {
                     key={symptom.id}
                     type="button"
                     aria-pressed={isSelected}
-                    disabled={!isReady}
+                    disabled={isInteractionDisabled}
                     onClick={() => toggleSymptom(symptom.id)}
                     className={cn(
                       "rounded-[28px] border p-5 text-left transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60",
@@ -225,7 +233,11 @@ export function DiagnosisPageClient() {
                   <Button
                     size="lg"
                     className="bg-white text-leaf-700 hover:bg-leaf-50"
-                    disabled={!isReady || selectedSymptomIds.length === 0 || isSubmittingDiagnosis}
+                    disabled={
+                      isInteractionDisabled ||
+                      selectedSymptomIds.length === 0 ||
+                      isSubmittingDiagnosis
+                    }
                     onClick={handleSubmit}
                   >
                     {isSubmittingDiagnosis ? "Menganalisis..." : "Lihat hasil diagnosis"}

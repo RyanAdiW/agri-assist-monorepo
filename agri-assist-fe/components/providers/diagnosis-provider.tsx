@@ -16,6 +16,7 @@ import type {
 
 interface DiagnosisContextValue {
   symptoms: Symptom[];
+  symptomsError: string;
   selectedSymptomIds: string[];
   latestResult: DiagnosisResponse | null;
   isReady: boolean;
@@ -39,6 +40,8 @@ export function DiagnosisProvider({
 }: {
   children: React.ReactNode;
 }) {
+  const [symptoms, setSymptoms] = useState<Symptom[]>([]);
+  const [symptomsError, setSymptomsError] = useState("");
   const [selectedSymptomIds, setSelectedSymptomIds] = useState<string[]>([]);
   const [latestResult, setLatestResult] = useState<DiagnosisResponse | null>(null);
   const [feedbackResult, setFeedbackResult] = useState<FeedbackResult | null>(null);
@@ -46,26 +49,63 @@ export function DiagnosisProvider({
   const [isSubmittingDiagnosis, setIsSubmittingDiagnosis] = useState(false);
 
   useEffect(() => {
-    try {
-      const savedSelection = window.sessionStorage.getItem(STORAGE_KEYS.selection);
-      const savedResult = window.sessionStorage.getItem(STORAGE_KEYS.result);
+    let isMounted = true;
 
-      if (savedSelection) {
-        const parsedSelection = JSON.parse(savedSelection) as string[];
-        setSelectedSymptomIds((current) =>
-          current.length > 0 ? current : parsedSelection
+    const hydrateSession = () => {
+      try {
+        const savedSelection = window.sessionStorage.getItem(STORAGE_KEYS.selection);
+        const savedResult = window.sessionStorage.getItem(STORAGE_KEYS.result);
+
+        if (savedSelection) {
+          const parsedSelection = JSON.parse(savedSelection) as string[];
+          setSelectedSymptomIds((current) =>
+            current.length > 0 ? current : parsedSelection
+          );
+        }
+
+        if (savedResult) {
+          const parsedResult = JSON.parse(savedResult) as DiagnosisResponse;
+          setLatestResult((current) => current ?? parsedResult);
+        }
+      } catch (error) {
+        console.error("Gagal memuat sesi diagnosis", error);
+      }
+    };
+
+    const loadSymptoms = async () => {
+      hydrateSession();
+
+      try {
+        const response = await getSymptoms();
+        if (!isMounted) {
+          return;
+        }
+
+        setSymptoms(response);
+        setSymptomsError("");
+      } catch (error) {
+        console.error("Gagal memuat daftar gejala", error);
+
+        if (!isMounted) {
+          return;
+        }
+
+        setSymptoms([]);
+        setSymptomsError(
+          "Daftar gejala belum bisa dimuat saat ini. Periksa koneksi ke backend lalu coba lagi."
         );
+      } finally {
+        if (isMounted) {
+          setIsReady(true);
+        }
       }
+    };
 
-      if (savedResult) {
-        const parsedResult = JSON.parse(savedResult) as DiagnosisResponse;
-        setLatestResult((current) => current ?? parsedResult);
-      }
-    } catch (error) {
-      console.error("Gagal memuat sesi diagnosis", error);
-    } finally {
-      setIsReady(true);
-    }
+    loadSymptoms();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -135,7 +175,8 @@ export function DiagnosisProvider({
   return (
     <DiagnosisContext.Provider
       value={{
-        symptoms: getSymptoms(),
+        symptoms,
+        symptomsError,
         selectedSymptomIds,
         latestResult,
         isReady,

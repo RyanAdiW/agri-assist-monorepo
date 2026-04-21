@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:real": "PLAYWRIGHT_USE_REAL_BE=true playwright test"
   },
   "dependencies": {
     "@radix-ui/react-slot": "1.0.2",
